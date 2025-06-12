@@ -1,0 +1,13 @@
+# Define os serviços (containers) do seu aplicativo
+services:
+  bot-travian:
+    # build:
+    #   context: .
+    #   dockerfile: Dockerfile
+    image: carlinls/bot-travian:latest
+    env_file:
+      - .env
+    # volumes:
+      # - ./application:/app
+      # - ./chrome_profile:/app/chrome_profile
+    restart: "no"
