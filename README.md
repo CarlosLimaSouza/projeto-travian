@@ -82,9 +82,9 @@ docker compose run --rm bot-travian
 - Adicione a linha (exemplo para rodar a cada 10 minutos):
   ```sh
   TZ=America/Sao_Paulo
-  */10 * * * * /usr/bin/docker compose run --rm bot-travian >> /home/carlinls/app.log 2>&1
+  */10 * * * * /usr/bin/docker compose run --rm bot-travian >> /home/user/app.log 2>&1
 
-  */10 * * * * echo "Cron rodou em: $(date)" >> /home/carlinls/cron_teste.log
+  */10 * * * * echo "Cron rodou em: $(date)" >> /home/user/cron_teste.log
   ```
 ---
 
