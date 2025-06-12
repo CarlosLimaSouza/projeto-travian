@@ -133,9 +133,7 @@ docker pull carlinls/bot-travian:latest
    cd app
    python main.py
    ```
-
 ---
-
 **Observações:**
 Não esqueça de ativar o ambiente virtual sempre que for rodar o projeto localmente!
 ---
