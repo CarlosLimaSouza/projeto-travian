@@ -135,6 +135,7 @@ docker pull carlinls/bot-travian:latest
    ```
 
 ---
-> **Obs:**  
-> Não esqueça de ativar o ambiente virtual sempre que for rodar o projeto localmente!
-=======
+
+**Observações:**
+Não esqueça de ativar o ambiente virtual sempre que for rodar o projeto localmente!
+---
