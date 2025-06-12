@@ -1,11 +1,17 @@
-# Guia de Configuração da VM para rodar o Bot Travian
+## Índice
 
-## 1. Atualize o sistema
+- [Guia de Configuração da VM para rodar o Bot Travian](#rodando-numa-vps-ou-vm)
+- [Rodando Localmente com Ambiente Virtual (venv)](#rodando-localmente-com-ambiente-virtual-venv)
+
+
+## Guia de Configuração da VM para rodar o Bot Travian
+
+1. Atualize o sistema
 ```sh
 sudo apt update && sudo apt upgrade -y
 ```
 
-## 2. Instale o Docker e dependências
+2. Instale o Docker e dependências
 ```sh
 sudo apt install -y docker.io
 sudo systemctl enable --now docker
@@ -18,23 +24,23 @@ sudo apt install -y docker-compose-plugin
 # sudo apt install -y docker-compose
 ```
 
-## 3. Adicione seu usuário ao grupo docker
+3. Adicione seu usuário ao grupo docker
 ```sh
 sudo usermod -aG docker $USER
 # Depois, faça logout e login novamente! (exit ou desligue e ligue a VM)
 ```
 
-## 4. Faça login no Docker Hub (se necessário)
+4. Faça login no Docker Hub (se necessário)
 ```sh
 docker login
 ```
 
-## 5. Baixe a imagem do container
+5. Baixe a imagem do container
 ```sh
 docker pull carlinls/bot-travian:latest
 ```
 
-## 6. Crie o .env
+6. Crie o .env
 - Crie um arquivo `.env` com os caminhos desejados:
   ```sh
   cat > .env <<EOF
@@ -54,7 +60,7 @@ docker pull carlinls/bot-travian:latest
   nano .env
   ```
 
-## 7. Use Docker Compose
+7. Use Docker Compose
 - Crie um arquivo `docker-compose.yml`:
   ```sh
   cat > docker-compose.yml <<EOF
@@ -73,7 +79,7 @@ docker pull carlinls/bot-travian:latest
   docker compose run --rm bot-travian
   ```
 
-## 8. Configure o cron para execução automática
+8. Configure o cron para execução automática
 - Edite o crontab:
   ```sh
   crontab -e
