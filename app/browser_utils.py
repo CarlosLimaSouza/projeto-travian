@@ -1,5 +1,5 @@
 from pyppeteer import launch
-from config import USER_DATA_DIR, IS_HEADLESS_MODE_ENABLED
+from config import IS_HEADLESS_MODE_ENABLED
 import sys
 
 if sys.platform.startswith("win"):
@@ -11,11 +11,11 @@ async def get_browser():
     return await launch(
         headless=IS_HEADLESS_MODE_ENABLED,
         executablePath=CHROME_PATH,
-        userDataDir=USER_DATA_DIR,
         args=[
             '--no-sandbox',
             '--disable-dev-shm-usage',
             '--disable-gpu',
-            '--disable-setuid-sandbox'
+            '--disable-setuid-sandbox',
+             '--window-size=1280,720'
         ]
     )

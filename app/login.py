@@ -2,12 +2,9 @@ from config import EMAIL, PASSWORD
 from logger import log
 
 async def do_login(page):
-    # Se o botão de login não existe, provavelmente já está logado
-    login_btn = await page.querySelector('button.login')
-    if not login_btn:
-        log('Já está logado, não precisa fazer login.')
-        return False
-
+    url_atual = page.url
+    log(f"URL atual ao tentar logar : {url_atual}")
+    await page.waitForSelector('button.login', timeout=30000)
     # Aceita cookies se necessário
     await page.evaluate('''
         () => {

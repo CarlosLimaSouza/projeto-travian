@@ -8,7 +8,8 @@ ENV PYPPETEER_CHROMIUM_REVISION="" \
     PYPPETEER_EXECUTABLE_PATH="/usr/bin/chromium"
 
 WORKDIR /app
-COPY . /app
+COPY ./app/ /app/
+COPY requirements.txt /app/
 
 RUN pip install --no-cache-dir -r requirements.txt
 

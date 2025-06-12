@@ -7,7 +7,6 @@ services:
     image: carlinls/bot-travian:latest
     env_file:
       - .env
-    # volumes:
-      # - ./application:/app
-      # - ./chrome_profile:/app/chrome_profile
+    volumes:
+      - ./travian_bot.log:/app/travian_bot.log
     restart: "no"

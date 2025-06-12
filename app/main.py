@@ -6,16 +6,23 @@ from gameworld import select_gameworld
 from recursos import upgrade_recursos
 from construcoes import upgrade_construcoes
 from logger import log
-from config import LOOK_RESOURCE, LOOK_BUILDING
+from config import LOOK_RESOURCE, LOOK_BUILDING,APP_ENABLE
 
 async def main():
     browser = await get_browser()
     page = await browser.newPage()
     await page.goto('https://www.travian.com/')
 
-    logged_in = await do_login(page)
-    if not logged_in:
-        await go_to_lobby(page)
+    if APP_ENABLE:
+        log("Aplicativo está habilitado. Iniciando o processo...") 
+    else:
+        log("Aplicativo está desabilitado. Encerrando o processo.")
+        await browser.close()
+        return
+
+    # logado = await go_to_lobby(page)
+    # if not logado:
+    await do_login(page)
 
     await select_gameworld(page)
 
