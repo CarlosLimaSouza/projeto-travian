@@ -133,7 +133,7 @@ docker pull carlinls/bot-travian:latest
    cd app
    python main.py
    ```
----
 **Observações:**
-Não esqueça de ativar o ambiente virtual sempre que for rodar o projeto localmente!
----
+- Sempre verifique permissões das pastas e arquivos.
+- O caminho dos volumes deve ser ajustado conforme a estrutura da VM.
+- Se mudar o nome do usuário, ajuste os caminhos.
