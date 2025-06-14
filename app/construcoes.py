@@ -2,27 +2,52 @@ import random
 from config import MINTIME, MAXTIME, TEST_MODE
 import asyncio
 from logger import log
+from construcoes_config import valida_upgrade,converte_gid_para_nome
 
 async def upgrade_construcoes(page):
     log('Verificando construções...')
     await page.click('#navigation a.buildingView')
     await page.waitForSelector('#villageContent', timeout=10000)
-    construcao_clicada = await page.evaluate('''
+    lista_construcoes = await page.evaluate('''
         () => {
             const container = document.getElementById('villageContent');
             if (!container) return false;
-            const slots = container.querySelectorAll('.buildingSlot');
-            for (const slot of slots) {
-                const link = slot.querySelector('a.good');
-                if (link) {
-                    link.click();
-                    return true;
-                }
-            }
-            return false;
+            const links = container.querySelectorAll('.buildingSlot');
+            return Array.from(links).map(link => ({
+                id: link.getAttribute('data-aid'),
+                gid: link.getAttribute('data-gid'),
+                level: link.querySelector('a').getAttribute('data-level'),
+                href: link.querySelector('a').href
+            }));
         }
     ''')
-    log(f'Espaço de construção clicado: {construcao_clicada}')
+    if not lista_construcoes:
+        log('Nenhuma construção disponível para upgrade.')
+        return
+    log(f'Construções disponíveis para upgrade: {lista_construcoes}')
+
+
+    # valida os upgrades possíveis
+    construcoes_validas= [c for c in lista_construcoes if valida_upgrade(c['gid'], c['level'])]
+    if not construcoes_validas:
+        log('Nenhuma construção válida para upgrade.')
+        return
+    log(f'Construções válidas para upgrade: {construcoes_validas}')
+
+    construcao_clicada = False
+    for construcao in construcoes_validas:
+        try:
+            # Clica no link da construção
+            await page.goto(construcao['href'], waitUntil='networkidle0')
+            construcao_clicada = True
+            log(f'Construção {converte_gid_para_nome(construcao["gid"])} clicada para upgrade..o nível atual é {construcao["level"]}.')
+            break  # Sai do loop após clicar na primeira construção válida
+        except Exception as e:
+            log(f'Erro ao clicar na construção ID:{construcao["id"]}/campo_{converte_gid_para_nome(construcao["gid"])}: {e}')
+
+    if not construcao_clicada:
+        log('Nenhuma construção válida encontrada para upgrade.')
+        return
 
     if construcao_clicada:
         # Espera o botão de upgrade aparecer
