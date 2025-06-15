@@ -10,7 +10,10 @@ barro_maximo = 10
 ferro_maximo = 9
 cereal_maximo = 8
  
-def valida_upgrade(slot, nivel):    
+def valida_upgrade(slot, nivel):   
+    # verifica se nivel é um número inteiro
+    if not isinstance(nivel, int):
+        nivel = 0 
     slot = int(slot)
     nivel = int(nivel)
     # deve chegar no slot algo como "1" ou "2" ou "3" ou "4"

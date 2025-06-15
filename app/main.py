@@ -7,6 +7,7 @@ from recursos import upgrade_recursos
 from construcoes import upgrade_construcoes
 from logger import log
 from config import LOOK_RESOURCE, LOOK_BUILDING,APP_ENABLE
+from aldeias import get_villages
 
 async def main():
     browser = await get_browser()
@@ -26,11 +27,21 @@ async def main():
 
     await select_gameworld(page)
 
-    # Apenas UM ciclo!
-    if LOOK_RESOURCE:
-        await upgrade_recursos(page)    
-    if LOOK_BUILDING: 
-        await upgrade_construcoes(page)
+    # Obtém a lista de aldeias
+    aldeias = await get_villages(page)
+    if not aldeias:
+        log('Nenhuma aldeia encontrada. Encerrando o processo.')
+        await browser.close()
+        return
+    log(f'aldeias encontradas: {aldeias}')
+    
+    for aldeia in aldeias:
+        log(f'Processando aldeia: {aldeia["nome"]} (ID: {aldeia["id"]})')
+        await page.goto(aldeia['href'], waitUntil='networkidle0')
+        if LOOK_RESOURCE:
+            await upgrade_recursos(page)    
+        if LOOK_BUILDING: 
+            await upgrade_construcoes(page)
 
     await browser.close()  # Fecha o navegador ao final
 
