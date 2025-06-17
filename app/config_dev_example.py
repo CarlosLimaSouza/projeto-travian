@@ -1,6 +1,5 @@
 # This file contains the configuration for the development environment.
 
-MODO_DESENVOLVIMENTO = True
 EMAIL_DEV = 'teste@email'
 PASSWORD_DEV = 'senha123'
 TEST_MODE_DEV = True

@@ -1,0 +1,5 @@
+venv/
+__pycache__/
+*.pyc
+.env
+travian_bot.log

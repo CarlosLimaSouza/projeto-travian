@@ -1,8 +1,9 @@
 import os
-from config_dev import MODO_DESENVOLVIMENTO,EMAIL_DEV, PASSWORD_DEV,TEST_MODE_DEV,APP_ENABLE_DEV,IS_HEADLESS_MODE_ENABLED_DEV,MINTIME_DEV,MAXTIME_DEV,LOOK_RESOURCE_DEV,LOOK_BUILDING_DEV,GAMEWORLD_DEV
+from config_dev import EMAIL_DEV, PASSWORD_DEV,TEST_MODE_DEV,APP_ENABLE_DEV,IS_HEADLESS_MODE_ENABLED_DEV,MINTIME_DEV,MAXTIME_DEV,LOOK_RESOURCE_DEV,LOOK_BUILDING_DEV,GAMEWORLD_DEV
 # Importando as variáveis de ambiente do arquivo config_dev.py
 
-if MODO_DESENVOLVIMENTO:
+# verifica se o modo de desenvolvimento está ativo no config e no env que só é acessado na VM
+if os.getenv('MODO_DESENVOLVIMENTO', 'True').lower() == 'true':
     # Configurações de desenvolvimento
     APP_ENABLE = APP_ENABLE_DEV
     TEST_MODE = TEST_MODE_DEV
