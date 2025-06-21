@@ -3,7 +3,7 @@ from logger import log
 async def go_to_lobby(page):
     log("Acessando a página do lobby...")
     try:
-        await page.waitForSelector('.content', timeout=20000)
+        await page.waitForSelector('.content', timeout=40000)
         log("Seletor .content encontrado!")
         return True
     except Exception as e:

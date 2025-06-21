@@ -7,7 +7,7 @@ from construcoes_config import valida_upgrade,converte_gid_para_nome
 async def upgrade_construcoes(page):
     log('Verificando construções...')
     await page.click('#navigation a.buildingView')
-    await page.waitForSelector('#villageContent', timeout=20000)
+    await page.waitForSelector('#villageContent', timeout=40000)
     lista_construcoes = await page.evaluate('''
         () => {
             const container = document.getElementById('villageContent');
@@ -52,7 +52,7 @@ async def upgrade_construcoes(page):
     if construcao_clicada:
         # Espera o botão de upgrade aparecer
         try:
-            await page.waitForSelector('.upgradeButtonsContainer .section1 button.build', timeout=20000)
+            await page.waitForSelector('.upgradeButtonsContainer .section1 button.build', timeout=40000)
             if TEST_MODE:
                 log('[TESTE] Botão de upgrade de construção seria clicado agora!')
             else:

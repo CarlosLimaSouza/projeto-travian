@@ -4,7 +4,7 @@ from logger import log
 async def select_gameworld(page):
     log(f'Selecionando o gameworld: {GAMEWORLD}')
     try:
-        await page.waitForSelector('.yourGameworlds', timeout=20000)
+        await page.waitForSelector('.yourGameworlds', timeout=40000)
         log('[DEBUG] .yourGameworlds encontrado')
         worlds = await page.querySelectorAll('.yourGameworlds .gameworld')
         log(f'[DEBUG] Mundos encontrados: {len(worlds)}')

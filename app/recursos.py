@@ -7,7 +7,7 @@ from recursos_config import valida_upgrade,converte_gid_para_nome
 async def upgrade_recursos(page):
     log('Verificando recursos...')
     await page.click('#navigation a.resourceView')
-    await page.waitForSelector('#resourceFieldContainer', timeout=20000)
+    await page.waitForSelector('#resourceFieldContainer', timeout=40000)
 
     # Obtém a lista de recursos disponíveis para upgrade
     lista_recursos = await page.evaluate('''
@@ -52,7 +52,7 @@ async def upgrade_recursos(page):
 
     if recurso_clicado:
         # Espera o botão de upgrade aparecer
-        await page.waitForSelector('.upgradeButtonsContainer .section1 button.build', timeout=20000)
+        await page.waitForSelector('.upgradeButtonsContainer .section1 button.build', timeout=40000)
         if TEST_MODE:
             log('[TESTE] Botão de upgrade de recurso seria clicado agora!')
         else:
