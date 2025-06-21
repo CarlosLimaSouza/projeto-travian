@@ -7,6 +7,7 @@ from construcoes_config import valida_upgrade,converte_gid_para_nome
 async def upgrade_construcoes(page):
     log('Verificando construções...')
     await page.click('#navigation a.buildingView')
+    log(await page.content())
     await page.waitForSelector('#villageContent', timeout=40000)
     lista_construcoes = await page.evaluate('''
         () => {
