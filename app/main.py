@@ -10,6 +10,8 @@ from config import LOOK_RESOURCE, LOOK_BUILDING,APP_ENABLE
 from aldeias import get_villages
 import gc
 
+
+
 async def main():
     browser = await get_browser()
     page = await browser.newPage()
@@ -35,10 +37,11 @@ async def main():
     log(f'aldeias encontradas: {aldeias}')
     
     for aldeia in aldeias:
-        gc.collect()
-        log(f'Processando aldeia: {aldeia["nome"]} (ID: {aldeia["id"]})')
         await page.close()
-        page = await browser.newPage()  # Cria uma nova página
+        page = await browser.newPage()
+        gc.collect()
+
+        log(f'Processando aldeia: {aldeia["nome"]} (ID: {aldeia["id"]})')
         await page.goto(aldeia['href'], waitUntil='networkidle0')
         if LOOK_RESOURCE:
             await upgrade_recursos(page)    

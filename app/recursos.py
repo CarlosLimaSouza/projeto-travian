@@ -26,7 +26,7 @@ async def upgrade_recursos(page):
     if not lista_recursos:
         log('Nenhum recurso disponível para upgrade.')
         return
-    log(f'Recursos disponíveis para upgrade: {lista_recursos}')
+    # log(f'Recursos disponíveis para upgrade: {lista_recursos}')
 
     
     # valida os upgrades possíveis

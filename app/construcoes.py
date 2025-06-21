@@ -7,7 +7,7 @@ from construcoes_config import valida_upgrade,converte_gid_para_nome
 async def upgrade_construcoes(page):
     log('Verificando construções...')
     await page.click('#navigation a.buildingView')
-    log(await page.content())
+    # log(await page.content())
     await page.waitForSelector('#villageContent', timeout=40000)
     lista_construcoes = await page.evaluate('''
         () => {
@@ -17,7 +17,7 @@ async def upgrade_construcoes(page):
             return Array.from(links)
                 .map(link => {
                     const a = link.querySelector('a');
-                    return a ? {
+                    return (a && a.classList.contains('good')) ? {
                         id: link.getAttribute('data-aid'),
                         gid: link.getAttribute('data-gid'),
                         level: a.getAttribute('data-level'),
@@ -30,7 +30,7 @@ async def upgrade_construcoes(page):
     if not lista_construcoes:
         log('Nenhuma construção disponível para upgrade.')
         return
-    log(f'Construções disponíveis para upgrade: {lista_construcoes}')
+    # log(f'Construções disponíveis para upgrade: {lista_construcoes}')
 
 
     # valida os upgrades possíveis
