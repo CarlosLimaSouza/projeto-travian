@@ -14,12 +14,17 @@ async def upgrade_construcoes(page):
             const container = document.getElementById('villageContent');
             if (!container) return false;
             const links = container.querySelectorAll('.buildingSlot');
-            return Array.from(links).map(link => ({
-                id: link.getAttribute('data-aid'),
-                gid: link.getAttribute('data-gid'),
-                level: link.querySelector('a').getAttribute('data-level'),
-                href: link.querySelector('a').href
-            }));
+            return Array.from(links)
+                .map(link => {
+                    const a = link.querySelector('a');
+                    return a ? {
+                        id: link.getAttribute('data-aid'),
+                        gid: link.getAttribute('data-gid'),
+                        level: a.getAttribute('data-level'),
+                        href: a.href
+                    } : null;
+                })
+                .filter(item => item && item.level !== null && item.gid !== "0");
         }
     ''')
     if not lista_construcoes:
