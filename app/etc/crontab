@@ -1,0 +1,2 @@
+*/10 * * * * root cd /app && python main.py >> /app/cron.log 2>&1
+* * * * * root echo "Cron rodou"

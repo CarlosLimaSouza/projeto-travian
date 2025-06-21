@@ -4,7 +4,7 @@ from logger import log
 async def do_login(page):
     url_atual = page.url
     log(f"URL atual ao tentar logar : {url_atual}")
-    await page.waitForSelector('button.login', timeout=30000)
+    await page.waitForSelector('button.login', timeout=20000)
     # Aceita cookies se necessário
     await page.evaluate('''
         () => {

@@ -3,7 +3,7 @@ from logger import log
 async def get_villages(page):
     log('Listando todas as aldeias...')
 
-    await page.waitForSelector('div.iconAndNameWrapper', timeout=10000)
+    await page.waitForSelector('div.iconAndNameWrapper', timeout=20000)
 
     # Obtém a lista de aldeias
     lista_aldeias = await page.evaluate('''

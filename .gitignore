@@ -9,3 +9,7 @@ __pycache__/
 
 # Ambiente virtual
 venv/
+
+# hosting no fly.io
+fly.toml
+mycron
