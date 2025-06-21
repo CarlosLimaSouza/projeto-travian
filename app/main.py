@@ -23,24 +23,28 @@ async def main():
 
     # logado = await go_to_lobby(page)
     # if not logado:
+    await asyncio.sleep(3)  # Aguarda 3 segundos
     await do_login(page)
-
+    await asyncio.sleep(3)  # Aguarda 3 segundos 
     await select_gameworld(page)
-
+    await asyncio.sleep(3)  # Aguarda 3 segundos 
     # Obtém a lista de aldeias
     aldeias = await get_villages(page)
+    await asyncio.sleep(3)  # Aguarda 3 segundos 
     if not aldeias:
         log('Nenhuma aldeia encontrada. Encerrando o processo.')
         await browser.close()
         return
     log(f'aldeias encontradas: {aldeias}')
-    
+    await asyncio.sleep(3)  # Aguarda 3 segundos 
     for aldeia in aldeias:
         log(f'Processando aldeia: {aldeia["nome"]} (ID: {aldeia["id"]})')
         await page.goto(aldeia['href'], waitUntil='networkidle0')
         if LOOK_RESOURCE:
+            await asyncio.sleep(3)  # Aguarda 3 segundos 
             await upgrade_recursos(page)    
         if LOOK_BUILDING: 
+            await asyncio.sleep(3)  # Aguarda 3 segundos 
             await upgrade_construcoes(page)
 
     await browser.close()  # Fecha o navegador ao final

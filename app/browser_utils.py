@@ -17,6 +17,7 @@ async def get_browser():
             '--disable-gpu',
             '--disable-setuid-sandbox',
             '--window-size=1280,720',
-            '--disable-gpu'
+            '--disable-gpu',
+            '--no-zygote'
         ]
     )
