@@ -29,6 +29,6 @@ COPY app/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
 #entrypoint como comando principal
-CMD ["/usr/sbin/cron", "-f"]
-# CMD ["/entrypoint.sh"]
+# CMD ["/usr/sbin/cron", "-f"]
+CMD ["/entrypoint.sh"]
 # CMD ["python", "main.py"]
