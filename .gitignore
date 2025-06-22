@@ -1,0 +1,15 @@
+# Não subir arquivos sensíveis e de ambiente
+.env
+config_dev.py
+
+# Não subir arquivos de log e cache
+travian_bot.log
+__pycache__/
+*.pyc
+
+# Ambiente virtual
+venv/
+
+# hosting no fly.io
+fly.toml
+mycron

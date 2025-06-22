@@ -1,0 +1,18 @@
+<div class="villageInfobox movements">
+					<table id="movements" cellspacing="1" cellpadding="1">
+							 <tbody><tr>
+					<th class="troopMovements header" colspan="3">
+						tropas chegando:					</th>
+				</tr>
+									<tr>
+						<td class="typ">
+							<a href="/build.php?gid=16&amp;tt=1&amp;filter=1&amp;subfilters=1"><img class="att1" src="/img/x.gif"></a>						</td>
+						<td>
+							<div class="mov">
+								<span class="a1">88 Ataques</span>							</div>
+							<div class="dur_r">
+								em <span class="timer" counting="down" value="161">0:02:41</span> hrs.							</div>
+						</td>
+					</tr>
+												</tbody></table>
+	</div>
