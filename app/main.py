@@ -57,15 +57,24 @@ async def main():
 def run_main():
     asyncio.run(main())
 
+@app.get("/ping")
+def ping():
+    print("[DEBUG] /ping chamado")
+    return {"status": "ok"}
+
 @app.get("/run")
 def run_endpoint():
+    print("[DEBUG] Endpoint /run chamado. Iniciando thread para run_main...")
     log("Endpoint /run chamado. Iniciando thread para run_main...")
     def safe_run_main():
         try:
+            print("[DEBUG] Thread run_main iniciada.")
             log("Thread run_main iniciada.")
             run_main()
+            print("[DEBUG] Thread run_main finalizada.")
             log("Thread run_main finalizada.")
         except Exception as e:
+            print(f"[DEBUG] Erro ao rodar main: {e}")
             log(f"Erro ao rodar main: {e}")
     Thread(target=safe_run_main).start()
     return {"status": "Processo iniciado"}
