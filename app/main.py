@@ -1,8 +1,5 @@
 import os
 import asyncio
-from fastapi import FastAPI
-from threading import Thread
-import uvicorn
 from browser_utils import get_browser
 from login import do_login
 from lobby import go_to_lobby
@@ -13,8 +10,28 @@ from logger import log
 from config import LOOK_RESOURCE, LOOK_BUILDING,APP_ENABLE
 from aldeias import get_villages
 import gc
+from fastapi import FastAPI
 
 app = FastAPI()
+
+@app.get("/")
+async def root():
+    return {"greeting": "Hello, World!", "message": "Welcome to FastAPI!"}
+
+@app.get("/ping")
+async def ping():
+    print("[DEBUG] /ping chamado")
+    return {"status": "ok"}
+
+@app.get("/run")
+async def run_endpoint():
+    print("[DEBUG] Endpoint /run chamado. Iniciando thread para run_main...")
+    try:
+        run_main()
+        log("Thread run_main finalizada.")
+    except Exception as e:
+        log(f"Erro ao rodar main: {e}")
+
 
 async def main():
     browser = await get_browser()
@@ -56,29 +73,8 @@ async def main():
 def run_main():
     asyncio.run(main())
 
-@app.get("/ping")
-def ping():
-    print("[DEBUG] /ping chamado")
-    return {"status": "ok"}
 
-@app.get("/run")
-def run_endpoint():
-    print("[DEBUG] Endpoint /run chamado. Iniciando thread para run_main...")
-    log("Endpoint /run chamado. Iniciando thread para run_main...")
-    def safe_run_main():
-        try:
-            print("[DEBUG] Thread run_main iniciada.")
-            log("Thread run_main iniciada.")
-            run_main()
-            print("[DEBUG] Thread run_main finalizada.")
-            log("Thread run_main finalizada.")
-        except Exception as e:
-            print(f"[DEBUG] Erro ao rodar main: {e}")
-            log(f"Erro ao rodar main: {e}")
-    Thread(target=safe_run_main).start()
-    return {"status": "Processo iniciado"}
 
-if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 8000))
-    print(f"[DEBUG] Iniciando Uvicorn na porta {port}")
-    uvicorn.run("main:app", host="0.0.0.0", port=port)
+
+
+    
