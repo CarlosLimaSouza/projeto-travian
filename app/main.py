@@ -9,8 +9,11 @@ from logger import log
 from config import LOOK_RESOURCE, LOOK_BUILDING,APP_ENABLE
 from aldeias import get_villages
 import gc
+from fastapi import FastAPI
+from threading import Thread
+import uvicorn
 
-
+app = FastAPI()
 
 async def main():
     browser = await get_browser()
@@ -50,4 +53,14 @@ async def main():
 
     await browser.close()  # Fecha o navegador ao final
 
-asyncio.run(main())
+# Função para rodar o main async em thread separada
+def run_main():
+    asyncio.run(main())
+
+@app.get("/run")
+def run_endpoint():
+    Thread(target=run_main).start()
+    return {"status": "Processo iniciado"}
+
+if __name__ == "__main__":
+    uvicorn.run("main:app", host="0.0.0.0", port=8000)
