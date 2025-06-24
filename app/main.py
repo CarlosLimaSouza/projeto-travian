@@ -59,7 +59,15 @@ def run_main():
 
 @app.get("/run")
 def run_endpoint():
-    Thread(target=run_main).start()
+    log("Endpoint /run chamado. Iniciando thread para run_main...")
+    def safe_run_main():
+        try:
+            log("Thread run_main iniciada.")
+            run_main()
+            log("Thread run_main finalizada.")
+        except Exception as e:
+            log(f"Erro ao rodar main: {e}")
+    Thread(target=safe_run_main).start()
     return {"status": "Processo iniciado"}
 
 if __name__ == "__main__":
