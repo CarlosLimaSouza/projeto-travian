@@ -1,4 +1,8 @@
+import os
 import asyncio
+from fastapi import FastAPI
+from threading import Thread
+import uvicorn
 from browser_utils import get_browser
 from login import do_login
 from lobby import go_to_lobby
@@ -9,9 +13,6 @@ from logger import log
 from config import LOOK_RESOURCE, LOOK_BUILDING,APP_ENABLE
 from aldeias import get_villages
 import gc
-from fastapi import FastAPI
-from threading import Thread
-import uvicorn
 
 app = FastAPI()
 
@@ -27,10 +28,7 @@ async def main():
         await browser.close()
         return
 
-    # logado = await go_to_lobby(page)
-    # if not logado:
     await do_login(page)
-
     await select_gameworld(page)
     gc.collect()
     aldeias = await get_villages(page)
@@ -54,6 +52,7 @@ async def main():
     await browser.close()  # Fecha o navegador ao final
 
 # Função para rodar o main async em thread separada
+
 def run_main():
     asyncio.run(main())
 
@@ -80,4 +79,6 @@ def run_endpoint():
     return {"status": "Processo iniciado"}
 
 if __name__ == "__main__":
-    uvicorn.run("main:app", host="0.0.0.0", port=8000)
+    port = int(os.environ.get("PORT", 8000))
+    print(f"[DEBUG] Iniciando Uvicorn na porta {port}")
+    uvicorn.run("main:app", host="0.0.0.0", port=port)
