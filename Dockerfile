@@ -26,4 +26,4 @@ EXPOSE 8080
 
 # Define o comando para iniciar a aplicação
 # Agora, podemos usar "main:app" porque main.py está diretamente em /app
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8080"]
+CMD uvicorn main:app --host 0.0.0.0 --port $PORT
