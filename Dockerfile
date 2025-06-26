@@ -15,7 +15,7 @@ RUN chmod +x ./start.sh
 
 RUN pip install --no-cache-dir -r requirements.txt
 
-EXPOSE 8000
+EXPOSE 8080
 
 # Usa o nosso script de inicialização para iniciar a aplicação
 CMD ["./start.sh"]
