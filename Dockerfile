@@ -2,7 +2,6 @@
 FROM python:3.13-slim
 
 # Define variáveis de ambiente que podem ser usadas durante o build
-# PYTHONUNBUFFERED garante que os logs apareçam em tempo real
 ENV PYTHONUNBUFFERED=1 \
     PYPPETEER_CHROMIUM_REVISION="" \
     PYPPETEER_EXECUTABLE_PATH="/usr/bin/chromium"
@@ -13,25 +12,18 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 # Define o diretório de trabalho dentro do container
-WORKDIR /
+WORKDIR /app
 
-# Copia primeiro o arquivo de requisitos para aproveitar o cache do Docker
-COPY requirements.txt .
+# --- A MUDANÇA CRUCIAL ESTÁ AQUI ---
+# Copia o CONTEÚDO da sua pasta local 'app' para o WORKDIR do container (/app)
+COPY app/ .
 
-# Instala as dependências Python
+# Instala as dependências Python a partir do requirements.txt que agora está em /app/requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
-
-# Copia o resto dos arquivos do projeto para o diretório de trabalho
-# O ponto de origem '.' é a raiz do seu projeto
-# O ponto de destino '.' é o WORKDIR atual (/app)
-COPY . .
 
 # Expõe a porta que a aplicação vai usar internamente
 EXPOSE 8080
 
 # Define o comando para iniciar a aplicação
-# - "uvicorn": O executável
-# - "app.main:app": O caminho do módulo (PACOTE.ARQUIVO:OBJETO)
-# - "--host", "0.0.0.0": Escuta em todas as interfaces de rede
-# - "--port", "8080": Usa a porta 8080
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8080"]
+# Agora, podemos usar "main:app" porque main.py está diretamente em /app
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8080"]
