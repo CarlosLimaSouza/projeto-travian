@@ -97,10 +97,20 @@ async def run_bot_session():
         await select_gameworld(page)
         log(f"Sessão iniciada. {len(aldeias_para_processar)} aldeias a serem processadas.")
         for aldeia in aldeias_para_processar:
-            log(f"Processando aldeia: {aldeia['nome']} (ID: {aldeia['id']})")
-            await page.goto(aldeia['href'], {'waitUntil': 'networkidle0'})
-            await upgrade_recursos(page)
-            await upgrade_construcoes(page)
+            try:
+                log(f"Processando aldeia: {aldeia['nome']} (ID: {aldeia['id']})")
+                await page.goto(aldeia['href'], {'waitUntil': 'networkidle0'})
+            except Exception as e:
+                log(f"Erro fatal ao abrir a aldeia: {e}")
+
+            try:
+                await upgrade_recursos(page)
+            except Exception as e:
+                log(f"Erro fatal no upgrade_recursos: {e}")
+            try:
+                await upgrade_construcoes(page)
+            except Exception as e:
+                log(f"Erro fatal no upgrade_construcoes: {e}")
             log(f"Processamento da aldeia '{aldeia['nome']}' finalizado. Pausando...")
             await asyncio.sleep(random.randint(10, 20)) 
         log("Ciclo completo de todas as aldeias ativas finalizado.")
