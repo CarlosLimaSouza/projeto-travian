@@ -7,10 +7,11 @@ RUN apt-get update && \
 ENV PYPPETEER_CHROMIUM_REVISION="" \
     PYPPETEER_EXECUTABLE_PATH="/usr/bin/chromium"
 
-WORKDIR /app
-COPY ./app/ /app/
-COPY requirements.txt /app/
+WORKDIR /app  
+COPY . /app   
 
 RUN pip install --no-cache-dir -r requirements.txt
 
-CMD ["python", "main.py"]
+EXPOSE 8000
+
+CMD ["sh", "-c", "hypercorn main:app --bind 0.0.0.0:${PORT:-8000}"]

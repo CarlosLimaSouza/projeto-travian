@@ -3,6 +3,8 @@ import asyncio
 from config import MINTIME, MAXTIME, TEST_MODE
 from logger import log
 from recursos_config import valida_upgrade,converte_gid_para_nome
+from browser_utils import get_browser
+import gc
 
 async def upgrade_recursos(page):
     log('Verificando recursos...')
@@ -34,13 +36,20 @@ async def upgrade_recursos(page):
     if not recursos_validos:
         log('Nenhum recurso válido para upgrade.')
         return
-    log(f'Recursos válidos para upgrade: {recursos_validos}')
+    # log(f'Recursos válidos para upgrade: {recursos_validos}')
     recurso_clicado = False
     for recurso in recursos_validos:
         try:
-            # Clica no link do recurso
-            await page.goto(recurso['href'], waitUntil='networkidle0')
-            recurso_clicado = True
+            log(f"URL da contrução: {recurso['href']}")
+            try:
+                # await page.close()
+                # browser = await get_browser()
+                # page = await browser.newPage()
+                # gc.collect()
+                await page.goto(recurso['href'], waitUntil='networkidle0')
+                recurso_clicado = True
+            except Exception as e:
+                log(f"Unexpected error: {e}")
             log(f'Recurso {converte_gid_para_nome(recurso["gid"])} clicado para upgrade..o nível atual é {recurso["level"]}.')
             break  # Sai do loop após clicar no primeiro recurso válido
         except Exception as e:
@@ -51,13 +60,30 @@ async def upgrade_recursos(page):
         return
 
     if recurso_clicado:
-        # Espera o botão de upgrade aparecer
-        await page.waitForSelector('.upgradeButtonsContainer .section1 button.build', timeout=40000)
-        if TEST_MODE:
-            log('[TESTE] Botão de upgrade de recurso seria clicado agora!')
-        else:
-            await page.click('.upgradeButtonsContainer .section1 button.build')
-            log('Botão de upgrade de recurso clicado!')
+        try:
+            # Espera o botão de upgrade aparecer
+            await page.waitForSelector('.upgradeButtonsContainer', timeout=30000)
+            upgrade_url = await page.evaluate('''
+                () => {
+                    const button = document.querySelector('.upgradeButtonsContainer .section1 button.build');
+                    if (!button) return null;
+
+                    const onclick = button.getAttribute('onclick');
+                    if (!onclick) return null;
+
+                    const match = onclick.match(/window\\.location\\.href = '([^']+)'/);
+                    return match ? match[1] : null;
+                }
+            ''')
+            if TEST_MODE:
+                log('[TESTE] Botão de upgrade de recurso seria clicado agora!')
+            else:
+                # log(f"URL do botao clicado: {upgrade_url}")
+                # await page.goto(upgrade_url, waitUntil='networkidle0')
+                await page.click('.upgradeButtonsContainer .section1 button.build')
+                log('Botão de upgrade de recurso clicado!')
+        except Exception as e:
+            log(f'Erro ao tentar clicar no botão de upgrade: {e}')
     else:
         log('falha ao clicar no recurso para upgrade.')
 

@@ -1,12 +1,12 @@
 # Define os serviços (containers) do seu aplicativo
 services:
   bot-travian:
-    # build:
-    #   context: .
-    #   dockerfile: Dockerfile
-    image: carlinls/bot-travian:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    # image: carlinls/bot-travian:latest
     env_file:
       - .env
-    volumes:
-      - ./travian_bot.log:/app/travian_bot.log
+    # volumes:
+      # - ./travian_bot.log:/app/travian_bot.log
     restart: "no"

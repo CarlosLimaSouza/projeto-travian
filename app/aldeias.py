@@ -27,3 +27,23 @@ async def get_villages(page):
         return
 
     return lista_aldeias
+
+    
+    # Return mock data
+    # return [
+    #     {
+    #         "id": "24109",
+    #         "nome": "carlin 1",
+    #         "href": "https://ts8.x1.international.travian.com/dorf1.php?newdid=24109&"
+    #     },
+    #     {
+    #         "id": "34852",
+    #         "nome": "carlin 2",
+    #         "href": "https://ts8.x1.international.travian.com/dorf1.php?newdid=34852&"
+    #     },
+    #     {
+    #         "id": "36944",
+    #         "nome": "carlin 3",
+    #         "href": "https://ts8.x1.international.travian.com/dorf1.php?newdid=36944&"
+    #     }
+    # ]

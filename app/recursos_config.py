@@ -1,45 +1,37 @@
-# gid que definem os recursos
-madeira = 1
-barro = 2
-ferro = 3
-cereal = 4
+from database import get_db_connection
 
-# niveis maximos dos recursos (sem limite == 99)
-madeira_maximo= 10
-barro_maximo = 10
-ferro_maximo = 9
-cereal_maximo = 8
- 
-def valida_upgrade(slot, nivel):   
-    # verifica se nivel é um número inteiro
-    if not isinstance(nivel, int):
-        nivel = 0 
-    slot = int(slot)
-    nivel = int(nivel)
-    # deve chegar no slot algo como "1" ou "2" ou "3" ou "4"
-    if slot == madeira:
-        if madeira_maximo > nivel:
-            return True
-    elif slot == barro:
-        if barro_maximo > nivel:
-            return True
-    elif slot == ferro:
-        if ferro_maximo > nivel:
-            return True
-    elif slot == cereal:
-        if cereal_maximo > nivel:
-            return True
-    return False  # Se não for nenhum dos recursos ou já estiver no máximo
+def valida_upgrade(gid, nivel):
+    """
+    Valida se um recurso pode ser atualizado com base nas regras do banco de dados.
+    """
+    if nivel is None:
+        return False
+    try:
+        # Garante que estamos comparando números
+        nivel = int(nivel)
+        gid = int(gid)
+    except (ValueError, TypeError):
+        return False
+
+    conn = get_db_connection()
+    # Busca a regra para o GID específico na tabela de recursos
+    rule = conn.execute('SELECT max_level FROM resource_rules WHERE gid = ?', (gid,)).fetchone()
+    conn.close()
+
+    if rule:
+        # Se encontrou uma regra, verifica se o nível atual é menor que o máximo permitido
+        max_level = rule['max_level']
+        return nivel < max_level
+
+    # Se não houver regra, não permite o upgrade
+    return False
 
 def converte_gid_para_nome(gid):
-    gid = int(gid) 
-    if gid == madeira:
-        return "Madeira"
-    elif gid == barro:
-        return "Barro"
-    elif gid == ferro:
-        return "Ferro"
-    elif gid == cereal:
-        return "Cereal"
-    else:
-        return "Recurso Desconhecido"  # Caso o gid não corresponda a nenhum recurso conhecido
+    """Converte o GID de um recurso para seu nome."""
+    gid_map = {
+        1: "Madeira",
+        2: "Barro",
+        3: "Ferro",
+        4: "Cereal"
+    }
+    return gid_map.get(int(gid), "Recurso Desconhecido")

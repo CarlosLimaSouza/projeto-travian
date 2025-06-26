@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>Configuração do Bot Travian</h1>
+
+{% if message == 'sync_started' %}
+    <div class="notification">
+        Sincronização iniciada em segundo plano. Por favor, <strong>atualize esta página</strong> em alguns instantes para ver as aldeias.
+    </div>
+{% endif %}
+{% if message == 'run_started' %}
+    <div class="notification">
+        Ciclo do bot iniciado em segundo plano. Veja o console para acompanhar o progresso.
+    </div>
+{% endif %}
+
+<!-- ====================================================== -->
+<!-- Seção de Aldeias                                     -->
+<!-- ====================================================== -->
+<h2>Aldeias</h2>
+<form action="/sync-villages" method="get">
+    <button type="submit">Sincronizar Aldeias com o Jogo</button>
+</form>
+
+{% if villages %}
+    <form action="/update-villages" method="post">
+        <table>
+            <thead>
+                <tr>
+                    <th>Ativa</th>
+                    <th>Nome da Aldeia</th>
+                    <th>Prioridade</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for village in villages %}
+                <tr>
+                    <td><input type="checkbox" name="active_{{ village.id }}" {% if village.is_active %}checked{% endif %}></td>
+                    <td>{{ village.nome }}</td>
+                    <td><input type="number" name="priority_{{ village.id }}" value="{{ village.priority }}" min="0"></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <br>
+        <button type="submit">Salvar Configurações das Aldeias</button>
+    </form>
+{% else %}
+    <p>Nenhuma aldeia encontrada. Clique em 'Sincronizar' para começar.</p>
+{% endif %}
+
+
+<!-- ====================================================== -->
+<!-- Seção de Recursos                                    -->
+<!-- ====================================================== -->
+<h2>Níveis Máximos de Recursos</h2>
+<form action="/update-resources" method="post">
+    <table>
+        <thead>
+            <tr>
+                <th>Recurso</th>
+                <th>Nível Máximo</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for rule in resource_rules %}
+            <tr>
+                <td>{{ rule.nome }}</td>
+                <td><input type="number" name="level_{{ rule.gid }}" value="{{ rule.max_level }}" min="0"></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <br>
+    <button type="submit">Salvar Regras de Recursos</button>
+</form>
+
+
+<!-- ====================================================== -->
+<!-- Seção de Construções                                 -->
+<!-- ====================================================== -->
+<h2>Níveis Máximos de Construção</h2>
+<form action="/update-buildings" method="post">
+    <table>
+        <thead>
+            <tr>
+                <th>Construção</th>
+                <th>Nível Máximo</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for rule in building_rules %}
+            <tr>
+                <td>{{ rule.nome }}</td>
+                <td><input type="number" name="level_{{ rule.gid }}" value="{{ rule.max_level }}" min="0"></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <br>
+    <button type="submit">Salvar Regras de Construção</button>
+</form>
+
+
+<!-- ====================================================== -->
+<!-- Seção de Controle do Bot                             -->
+<!-- ====================================================== -->
+<hr>
+<h2>Controle do Bot</h2>
+<form action="/run" method="get">
+    <button type="submit">Iniciar Ciclo do Bot Agora</button>
+</form>
+
+{% endblock %}

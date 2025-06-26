@@ -3,6 +3,8 @@ from config import MINTIME, MAXTIME, TEST_MODE
 import asyncio
 from logger import log
 from construcoes_config import valida_upgrade,converte_gid_para_nome
+from browser_utils import get_browser
+import gc
 
 async def upgrade_construcoes(page):
     log('Verificando construções...')
@@ -38,14 +40,21 @@ async def upgrade_construcoes(page):
     if not construcoes_validas:
         log('Nenhuma construção válida para upgrade.')
         return
-    log(f'Construções válidas para upgrade: {construcoes_validas}')
+    # log(f'Construções válidas para upgrade: {construcoes_validas}')
 
     construcao_clicada = False
     for construcao in construcoes_validas:
         try:
-            # Clica no link da construção
-            await page.goto(construcao['href'], waitUntil='networkidle0')
-            construcao_clicada = True
+            log(f"URL da contrução: {construcao['href']}")
+            try:
+                # await page.close()
+                # browser = await get_browser()
+                # page = await browser.newPage()
+                # gc.collect()
+                await page.goto(construcao['href'], waitUntil='networkidle0')
+                construcao_clicada = True
+            except Exception as e:
+                log(f"Unexpected error: {e}")
             log(f'Construção {converte_gid_para_nome(construcao["gid"])} clicada para upgrade..o nível atual é {construcao["level"]}.')
             break  # Sai do loop após clicar na primeira construção válida
         except Exception as e:
@@ -58,10 +67,24 @@ async def upgrade_construcoes(page):
     if construcao_clicada:
         # Espera o botão de upgrade aparecer
         try:
-            await page.waitForSelector('.upgradeButtonsContainer .section1 button.build', timeout=40000)
+            await page.waitForSelector('.upgradeButtonsContainer', timeout=30000)
+            upgrade_url = await page.evaluate('''
+                () => {
+                    const button = document.querySelector('.upgradeButtonsContainer .section1 button.build');
+                    if (!button) return null;
+
+                    const onclick = button.getAttribute('onclick');
+                    if (!onclick) return null;
+
+                    const match = onclick.match(/window\\.location\\.href = '([^']+)'/);
+                    return match ? match[1] : null;
+                }
+            ''')
             if TEST_MODE:
                 log('[TESTE] Botão de upgrade de construção seria clicado agora!')
             else:
+                # log(f"URL do botao clicado: {upgrade_url}")
+                # await page.goto(upgrade_url, waitUntil='networkidle0')
                 await page.click('.upgradeButtonsContainer .section1 button.build')
                 log('Botão de upgrade de construção clicado!')
         except Exception as e:
