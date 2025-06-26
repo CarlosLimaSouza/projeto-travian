@@ -13,7 +13,7 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 # Define o diretório de trabalho dentro do container
-WORKDIR /app
+WORKDIR /
 
 # Copia primeiro o arquivo de requisitos para aproveitar o cache do Docker
 COPY requirements.txt .
