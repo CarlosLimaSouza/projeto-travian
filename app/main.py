@@ -92,12 +92,23 @@ async def run_bot_session():
     try:
         browser = await get_browser()
         page = await browser.newPage()
-        await page.goto('https://www.travian.com/', {'waitUntil': 'networkidle0'})
+
+        await page.goto('https://www.travian.com/', {'waitUntil': 'networkidle0', 'timeout': 90000})
         await do_login(page)
         await select_gameworld(page)
         log(f"Sessão iniciada. {len(aldeias_para_processar)} aldeias a serem processadas.")
         for aldeia in aldeias_para_processar:
             try:
+                await page.setRequestInterception(True)
+        
+                async def intercept(request):
+                    if request.resourceType in ['image','font', 'media']:
+                        await request.abort()
+                    else:
+                        await request.continue_()
+
+                page.on('request', lambda req: asyncio.ensure_future(intercept(req)))
+                # -----------------------------------------------------------
                 log(f"Processando aldeia: {aldeia['nome']} (ID: {aldeia['id']})")
                 await page.goto(aldeia['href'], {'waitUntil': 'networkidle0'})
             except Exception as e:
